@@ -11,7 +11,7 @@ import (
 	"log"
 	"os"
 
-	getconfig "github.com/vivaneiona/gonfig"
+	gonfig "github.com/vivaneiona/gonfig"
 )
 
 // JWTConfig represents a configuration for JWT signing
@@ -59,7 +59,7 @@ func main() {
 	// Load configuration
 	// Initialize config struct and load into it
 	config := &JWTConfig{}
-	cfg, err := getconfig.Load(config)
+	cfg, err := gonfig.Load(config)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -82,5 +82,5 @@ func main() {
 
 	// Show safe configuration output (keys are masked)
 	fmt.Println("\nSafe config output:")
-	fmt.Println(getconfig.PrettyString(cfg))
+	fmt.Println(gonfig.PrettyString(cfg))
 }

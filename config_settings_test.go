@@ -1,4 +1,4 @@
-package getconfig
+package gonfig
 
 import (
 	"net/url"

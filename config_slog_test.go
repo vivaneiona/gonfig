@@ -1,4 +1,4 @@
-package getconfig
+package gonfig
 
 import (
 	"log/slog"

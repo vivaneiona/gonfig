@@ -1,4 +1,4 @@
-package getconfig
+package gonfig
 
 import (
 	"os"
@@ -20,7 +20,7 @@ func TestLoadWithDotenv(t *testing.T) {
 	}
 
 	// Create a temporary directory for the test
-	tempDir, err := os.MkdirTemp("", "getconfig_test")
+	tempDir, err := os.MkdirTemp("", "gonfig_test")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -84,7 +84,7 @@ func TestLoadWithDotenvCustomPath(t *testing.T) {
 	}
 
 	// Create a temporary directory for the test
-	tempDir, err := os.MkdirTemp("", "getconfig_test")
+	tempDir, err := os.MkdirTemp("", "gonfig_test")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -116,7 +116,7 @@ func TestDotenvPrecedence(t *testing.T) {
 	}
 
 	// Create a temporary directory for the test
-	tempDir, err := os.MkdirTemp("", "getconfig_test")
+	tempDir, err := os.MkdirTemp("", "gonfig_test")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -164,7 +164,7 @@ func TestDotenvWithExistingValues(t *testing.T) {
 	}
 
 	// Create a temporary directory for the test
-	tempDir, err := os.MkdirTemp("", "getconfig_test")
+	tempDir, err := os.MkdirTemp("", "gonfig_test")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -227,7 +227,7 @@ func TestDotenvWithNestedStructs(t *testing.T) {
 	}
 
 	// Create a temporary directory for the test
-	tempDir, err := os.MkdirTemp("", "getconfig_test")
+	tempDir, err := os.MkdirTemp("", "gonfig_test")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -290,7 +290,7 @@ func TestDotenvWithSlices(t *testing.T) {
 	}
 
 	// Create a temporary directory for the test
-	tempDir, err := os.MkdirTemp("", "getconfig_test")
+	tempDir, err := os.MkdirTemp("", "gonfig_test")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -396,7 +396,7 @@ func TestDotenvMalformedFile(t *testing.T) {
 	}
 
 	// Create a temporary directory for the test
-	tempDir, err := os.MkdirTemp("", "getconfig_test")
+	tempDir, err := os.MkdirTemp("", "gonfig_test")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}
@@ -434,7 +434,7 @@ func TestDotenvWithRequiredFields(t *testing.T) {
 	}
 
 	// Create a temporary directory for the test
-	tempDir, err := os.MkdirTemp("", "getconfig_test")
+	tempDir, err := os.MkdirTemp("", "gonfig_test")
 	if err != nil {
 		t.Fatalf("Failed to create temp dir: %v", err)
 	}

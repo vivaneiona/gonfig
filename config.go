@@ -1,4 +1,4 @@
-// Package getconfig provides type-safe configuration loading from environment variables
+// Package gonfig provides type-safe configuration loading from environment variables
 // with support for defaults, secret masking, nested structs, and .env files.
 //
 // The library uses struct tags to control configuration loading:
@@ -27,12 +27,12 @@
 //	    SocketURL   url.URL `env:"SOCKET_URL" default:"postgresql://user:pass@/mydb?host=/var/run/postgresql"`
 //	}
 //
-//	cfg, err := getconfig.Load(Config{})
+//	cfg, err := gonfig.Load(Config{})
 //	if err != nil {
 //	    log.Fatal(err)
 //	}
-//	log.Info("config loaded", "cfg", getconfig.PrettyString(cfg))
-package getconfig
+//	log.Info("config loaded", "cfg", gonfig.PrettyString(cfg))
+package gonfig
 
 import (
 	"crypto/ecdsa"

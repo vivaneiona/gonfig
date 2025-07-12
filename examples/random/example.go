@@ -1,7 +1,7 @@
 // example.go
 //
 // A single, fully-featured configuration struct exercising every capability
-// of the getconfig library. Copy this file into your project, run
+// of the gonfig library. Copy this file into your project, run
 //
 //     go run example.go
 //
@@ -23,7 +23,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/shopspring/decimal"
-	"github.com/veiloq/getconfig"
+	"github.com/veiloq/gonfig"
 	"k8s.io/apimachinery/pkg/api/resource"
 )
 
@@ -50,7 +50,7 @@ type Credentials struct {
  */
 type AppConfig struct {
 	// Basic types
-	AppName string  `env:"APP_NAME"  default:"getconfig-app"`
+	AppName string  `env:"APP_NAME"  default:"gonfig-app"`
 	Port    int     `env:"PORT"      default:"8080"`
 	Debug   bool    `env:"DEBUG"     default:"false"`
 	Pi      float64 `env:"PI"        default:"3.141592"`
@@ -100,10 +100,10 @@ func main() {
 	cfg := &AppConfig{}
 
 	// Load from env, optional .env file, and defaults (in that order)
-	getconfig.LoadWithDotenv(cfg)
+	gonfig.LoadWithDotenv(cfg)
 
 	fmt.Println("Current configuration (secrets masked):")
-	fmt.Println(getconfig.PrettyString(cfg))
+	fmt.Println(gonfig.PrettyString(cfg))
 
 	fmt.Printf("▶ Starting %s on %s:%d (debug=%v)…\n",
 		cfg.AppName, cfg.ListenIP, cfg.Port, cfg.Debug)
