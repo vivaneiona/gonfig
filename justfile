@@ -1,5 +1,5 @@
-# getconfig Module Justfile
-# Basic Go commands for getconfig dependency
+# gonfig Module Justfile
+# Basic Go commands for gonfig dependency
 set shell := ["/bin/bash", "-c"]
 
 import 'version.just'

@@ -43,14 +43,14 @@ type Config struct {
 
 func main() {
     cfg := &Config{}
-    config := getconfig.Load(cfg)
+    config := gonfig.Load(cfg)
     
     fmt.Printf("Server starting on %s:%d\n", config.Host, config.Port)
     fmt.Printf("Debug mode: %v\n", config.Debug)
     
     // Pretty print configuration (secrets will be masked)
     fmt.Println("Configuration:")
-    fmt.Println(getconfig.PrettyString(cfg))
+    fmt.Println(gonfig.PrettyString(cfg))
 }
 ```
 
@@ -153,7 +153,7 @@ Loads configuration from environment variables into the provided struct pointer.
 **Example:**
 ```go
 cfg := &Config{}
-loaded := getconfig.Load(cfg)
+loaded := gonfig.Load(cfg)
 ```
 
 ### `LoadWithDotenv[T any](config T, dotenvPath ...string) T`
@@ -170,7 +170,7 @@ Loads configuration from environment variables with optional `.env` file support
 **Example:**
 ```go
 cfg := &Config{}
-loaded := getconfig.LoadWithDotenv(cfg, "config/.env")
+loaded := gonfig.LoadWithDotenv(cfg, "config/.env")
 ```
 
 ### `PrettyString(c any) string`
@@ -186,7 +186,7 @@ Returns a JSON-formatted string representation of the configuration with secrets
 **Example:**
 ```go
 cfg := &Config{APIKey: "secret123"}
-fmt.Println(getconfig.PrettyString(cfg))
+fmt.Println(gonfig.PrettyString(cfg))
 // Output: {"API_KEY": "sec****", ...}
 ```
 
@@ -231,7 +231,7 @@ type AppConfig struct {
 }
 
 cfg := &AppConfig{}
-config := getconfig.Load(cfg)
+config := gonfig.Load(cfg)
 ```
 
 ### With CSV Slices
@@ -247,14 +247,14 @@ type ServerConfig struct {
 }
 
 cfg := &ServerConfig{}
-config := getconfig.Load(cfg)
+config := gonfig.Load(cfg)
 
 // Access slice values
 fmt.Printf("Listening on ports: %v\n", config.Ports)
 fmt.Printf("Allowed IPs: %v\n", config.AllowedIPs)
 
 // Safe to log - secret slices will be masked
-fmt.Println(getconfig.PrettyString(cfg))
+fmt.Println(gonfig.PrettyString(cfg))
 ```
 
 Set environment variables:
@@ -277,10 +277,10 @@ type DatabaseConfig struct {
 }
 
 cfg := &DatabaseConfig{}
-config := getconfig.LoadWithDotenv(cfg)
+config := gonfig.LoadWithDotenv(cfg)
 
 // Safe to log - password will be masked
-fmt.Println(getconfig.PrettyString(cfg))
+fmt.Println(gonfig.PrettyString(cfg))
 ```
 
 ### Using .env Files
@@ -305,7 +305,7 @@ type Config struct {
 }
 
 cfg := &Config{}
-config := getconfig.LoadWithDotenv(cfg)
+config := gonfig.LoadWithDotenv(cfg)
 ```
 
 ### JWT Configuration with Cryptographic Keys
@@ -326,7 +326,7 @@ type JWTConfig struct {
 }
 
 cfg := &JWTConfig{}
-config := getconfig.Load(cfg)
+config := gonfig.Load(cfg)
 
 // Private keys are automatically parsed from PEM format
 // Both PKCS#1 ("RSA PRIVATE KEY") and PKCS#8 ("PRIVATE KEY") formats supported
