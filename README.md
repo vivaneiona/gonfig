@@ -2,7 +2,7 @@
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/vivaneiona/gonfig.svg)](https://pkg.go.dev/github.com/vivaneiona/gonfig)
 
-*A basic, type-safe configuration loader for Go.*
+*A basic, heavy, ad-hoc configuration loader for Go.*
 
 ---
 
