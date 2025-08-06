@@ -3,6 +3,7 @@ module github.com/vivaneiona/gonfig
 go 1.24.3
 
 require (
+	github.com/expr-lang/expr v1.17.5
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/shopspring/decimal v1.4.0

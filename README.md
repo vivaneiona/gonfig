@@ -11,7 +11,7 @@
 - Loads struct-tagged settings directly from environment variables
 - Optional `.env` support
 - Defaults and CSV slices
-- Extended parsing for `time.Duration`, `uuid.UUID`, `decimal.Decimal`, and other 
+- Extended parsing for `time.Duration`, `uuid.UUID`, `decimal.Decimal`, `vm.Program` (expr), and other specialized types 
 
 ## Quick Start
 
@@ -22,6 +22,8 @@ import (
 	"fmt"
 
 	"github.com/vivaneiona/gonfig"
+	"github.com/expr-lang/expr"
+	"github.com/expr-lang/expr/vm"
 )
 
 
@@ -50,8 +52,26 @@ type Config struct {
 
 func main() {
 	cfg, err := gonfig.Load(Config{})
+	if err != nil {
+		panic(err)
+	}
 
 	fmt.Println(gonfig.PrettyString(cfg)) // secrets masked
+
+	// Use the compiled expression
+	if cfg.AccessRule != nil {
+		env := map[string]interface{}{
+			"user": map[string]interface{}{
+				"role":     "user",
+				"verified": true,
+			},
+		}
+		result, err := expr.Run(cfg.AccessRule, env)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Printf("Access granted: %v\n", result)
+	}
 }
 ```
 
@@ -140,6 +160,82 @@ The library automatically detects types that implement `encoding.TextUnmarshaler
 - Value types and pointer types
 - Slices of custom types
 - Nested structs containing custom types
+
+## Expression Language Support
+
+gonfig includes built-in support for [expr-lang/expr](https://github.com/expr-lang/expr), a powerful expression language for Go. This allows you to configure business rules, validation logic, and filters using expressions that are compiled once and executed efficiently.
+
+```go
+package main
+
+import (
+	"fmt"
+	"log"
+
+	"github.com/expr-lang/expr"
+	"github.com/expr-lang/expr/vm"
+	"github.com/vivaneiona/gonfig"
+)
+
+type Config struct {
+	// Business rules
+	AccessRule    *vm.Program `env:"ACCESS_RULE" default:"user.role in ['admin', 'moderator']"`
+	RateLimit     *vm.Program `env:"RATE_LIMIT" default:"user.requests_per_hour < 1000"`
+	FeatureFlags  *vm.Program `env:"FEATURE_FLAGS"`
+	
+	// Multiple validation rules
+	ValidationRules []*vm.Program `env:"VALIDATION_RULES"`
+}
+
+func main() {
+	cfg, err := gonfig.Load(Config{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Use compiled expressions for fast evaluation
+	user := map[string]interface{}{
+		"role":               "admin",
+		"requests_per_hour":  500,
+		"verified":           true,
+	}
+
+	// Check access
+	if cfg.AccessRule != nil {
+		hasAccess, err := expr.Run(cfg.AccessRule, map[string]interface{}{"user": user})
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("Access granted: %v\n", hasAccess)
+	}
+
+	// Check rate limit
+	if cfg.RateLimit != nil {
+		withinLimit, err := expr.Run(cfg.RateLimit, map[string]interface{}{"user": user})
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("Within rate limit: %v\n", withinLimit)
+	}
+}
+```
+
+### Expression Examples
+
+Set expressions via environment variables:
+
+```bash
+export ACCESS_RULE="user.role == 'admin' && user.verified == true"
+export RATE_LIMIT="user.requests_per_hour < 1000 && user.tier != 'free'"
+export FEATURE_FLAGS="user.beta_features == true || user.role in ['admin', 'developer']"
+export VALIDATION_RULES="age >= 18,email matches '^[\\w\\.]+@[\\w\\.]+$',country in ['US', 'CA', 'UK']"
+```
+
+Benefits:
+- **Performance**: Expressions are compiled once at startup, not evaluated repeatedly
+- **Safety**: Expression syntax is validated at configuration load time
+- **Flexibility**: Support for complex logic including arrays, objects, and built-in functions
+- **Type Safety**: Full integration with gonfig's type system and error handling
 
 ## API
 

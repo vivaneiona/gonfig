@@ -1,11 +1,19 @@
-// Package gonfig provides a small, type-safe configuration loader for Go applications.
+// Package gonfig provides a small, type-safe configuration loader for Go application//	// Crypto keys (PEM format)
+//
+//	PrivateKey rsa.PrivateKey `secret:"PRIVATE_KEY"`
+//
+//	// Expression language for business rules
+//	AccessRule *vm.Program `env:"ACCESS_RULE" default:"user.role == 'admin'"`
+//	Rules      []*vm.Program `env:"BUSINESS_RULES"`
+//
+//	// Database URLs with support for both TCP and Unix sockets/
 //
 // # Features
 //
 //   - Loads struct-tagged settings directly from environment variables
 //   - Optional .env file support
 //   - Default values and CSV slices parsing
-//   - Extended parsing for time.Duration, uuid.UUID, decimal.Decimal, and other specialized types
+//   - Extended parsing for time.Duration, uuid.UUID, decimal.Decimal, vm.Program (expr), and other specialized types
 //   - Secret masking for sensitive configuration values
 //   - Support for nested structs (both value and pointer types)
 //   - Comprehensive type support including crypto keys, network addresses, and Kubernetes resource quantities
@@ -20,6 +28,7 @@
 //   - Crypto types: rsa.PrivateKey, ecdsa.PrivateKey (from PEM format)
 //   - Specialized types: uuid.UUID, decimal.Decimal, big.Int, slog.Level
 //   - Kubernetes types: resource.Quantity
+//   - Expression language: vm.Program (expr-lang/expr for business rules and validation)
 //   - Any type implementing encoding.TextUnmarshaler
 //   - Nested structs (recursive processing)
 //

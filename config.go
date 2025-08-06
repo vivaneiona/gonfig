@@ -9,7 +9,8 @@
 //
 // Supported types: string, bool, int (all sizes), float32, float64, slices, nested structs,
 // time.Duration, time.Time, slog.Level, big.Int, decimal.Decimal, url.URL, net.IP, mail.Address,
-// uuid.UUID, resource.Quantity, rsa.PrivateKey, ecdsa.PrivateKey (from PEM), and any type implementing encoding.TextUnmarshaler
+// uuid.UUID, resource.Quantity, rsa.PrivateKey, ecdsa.PrivateKey (from PEM), vm.Program (expr-lang/expr),
+// and any type implementing encoding.TextUnmarshaler
 //
 // New: Nested structs (value or pointer) are fully supported with recursive processing.
 //
@@ -54,6 +55,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/expr-lang/expr"
+	"github.com/expr-lang/expr/vm"
 	"github.com/joho/godotenv"
 	"github.com/shopspring/decimal"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -345,6 +348,7 @@ func buildSafeMap(val reflect.Value) map[string]any {
 //   - k8s.io/apimachinery/pkg/api/resource.Quantity (Kubernetes resource units like 250m, 1.5Gi)
 //   - crypto/rsa.PrivateKey (RSA private keys from PEM format)
 //   - crypto/ecdsa.PrivateKey (ECDSA private keys from PEM format)
+//   - github.com/expr-lang/expr/vm.Program (compiled expressions for business rules and validation)
 //   - Any type implementing encoding.TextUnmarshaler
 //
 // The function returns an error if:
@@ -915,6 +919,15 @@ func init() {
 		default:
 			return nil, fmt.Errorf("unsupported PEM block type for ECDSA private key: %s", block.Type)
 		}
+	})
+
+	// Register vm.Program parsers (expr-lang/expr expression language)
+	RegisterParser(reflect.TypeOf(&vm.Program{}), func(raw string) (any, error) {
+		program, err := expr.Compile(raw)
+		if err != nil {
+			return nil, fmt.Errorf("failed to compile expression %q: %w", raw, err)
+		}
+		return program, nil
 	})
 
 	// ✂️  Removed a generic “zero-value struct” parser factory.
